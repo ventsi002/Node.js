@@ -1,7 +1,8 @@
-// const express = require("express");
-// const app = express();
-const app = require("express")();
+const express = require("express");
+const app = express();
+// const app = require("express")();
 
+app.use(express.json());
 
 ///route (entire thing)
 // HTTP method
@@ -25,5 +26,22 @@ app.get("/about", (req, res) => {
     <h1>About</h1>
     <h3>my pishka</h3>
     `);
-}),
-    app.listen(8080);
+});
+
+app.get("/bat", (req, res) => {
+    console.log(req.query);
+
+    res.send({ message: `The bat is ${req.query.adjective}.` });
+});
+
+app.get("/bottle/:bottleSize", (req, res) => {
+    console.log(req.params);
+    res.send({ bottleSize: req.params.bottleSize })
+});
+
+app.post("/package", (req, res) => {
+    console.log(req.body);
+    res.send({ message: req.body });
+});
+
+app.listen(8080);
