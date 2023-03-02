@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday</title>
+    <style>
+        html,
+        body {
+            margin: 0;
+            height: 100%;
+            background: linear-gradient(#4eaae4, #2de8d2);
+        }
+
+        #dateNow {
+            font-size: 36px;
+            margin-top: 75px;
+            margin-left: 620px;
+        }
+
+        #info {
+            font-size: 36px;
+            padding-top: 100px;
+            margin-left: 620px;
+        }
+
+        #birthday {
+            display: block;
+            border-radius: 5px;
+            border: none;
+            background-color: #2de8d2;
+            height: 30px;
+            width: 150px;
+            margin-left: 75px;
+        }
+
+        button {
+            font-size: 36px;
+            border-radius: 5px;
+            border: none;
+            background-color: #2de8d2;
+            height: 50px;
+            width: 175px;
+            margin-left: 64px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        #result {
+            font-size: 28px;
+            margin-top: 75px;
+            margin-left: 350px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="info">
+        <label for="birthday">Enter your birthday:</label>
+        <input type="date" id="birthday" name="birthday">
+        <button onclick="calculateDaysUntilBirthday()">Calculate</button>
+    </div>
+    <div id="dateNow"></div>
+    <p id="result"></p>
+
+
+    <script>
+        const dateNow = document.getElementById("dateNow");
+
+        fetch("/api/birthday")
+            .then(response => response.json())
+            .then(result => {
+                dateNow.innerHTML = `Current date: <br> ${new Date(result.time).toLocaleString()}`;
+            })
+
+        function calculateDaysUntilBirthday() {
+            const birthdayInput = document.getElementById("birthday");
+            const birthday = new Date(birthdayInput.value);
+            const now = new Date();
+            const thisYearBirthday = new Date(now.getFullYear(), birthday.getMonth(), birthday.getDate());
+            const nextYearBirthday = new Date(now.getFullYear() + 1, birthday.getMonth(), birthday.getDate());
+            const diffTime = Math.min(Math.abs(now - thisYearBirthday), Math.abs(now - nextYearBirthday));
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            const diffHours = Math.floor((diffTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const diffMinutes = Math.floor((diffTime % (1000 * 60 * 60)) / (1000 * 60));
+            const diffSeconds = Math.floor((diffTime % (1000 * 60)) / 1000);
+
+            document.getElementById("result").innerHTML = `Time until your next birthday: ${diffDays} days, ${diffHours} hours, ${diffMinutes} minutes, and ${diffSeconds} seconds`;
+
+            setInterval(calculateDaysUntilBirthday, 1000);
+
+        }
+
+
+    </script>
+</body>
+
+</html>
