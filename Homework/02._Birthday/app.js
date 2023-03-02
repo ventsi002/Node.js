@@ -3,7 +3,7 @@ const app = express();
 app.use(express.json());
 
 app.get("/birthday", (req, res) => {
-    res.sendFile(__dirname + "/birthday.html");
+    res.sendFile(__dirname + "public/birthday.html");
 });
 
 
@@ -14,4 +14,4 @@ app.get("/api/birthday", (req, res) => {
 
 app.listen(8080);
 
-module.exports = app
+module.exports = app;
