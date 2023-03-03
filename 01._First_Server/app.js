@@ -44,4 +44,29 @@ app.post("/package", (req, res) => {
     res.send({ message: req.body });
 });
 
+app.get("/time/time", (req, res) => {
+    res.send({
+        timeUTC: new Date(),
+        timeLocal: Date(),
+        timeUnix: Date.now()
+    });
+});
+
+const days = ["sun", "m", "tue", "w", "thu", "f", "sat"]
+
+app.get("/time/day", (req, res) => {
+    res.send({ data: days[new Date().getDay()] });
+});
+
+const months = ["j", "f", "m", "a", "m", "jun", "jul", "aug", "s", "o", "n", "d"]
+
+app.get("/time/month", (req, res) => {
+    res.send({ data: months[new Date().getMonth()] });
+});
+
+console.log(new Date());
+console.log(Date());
+console.log(Date.now());
+console.log(new Date().getDay());
+
 app.listen(8080);

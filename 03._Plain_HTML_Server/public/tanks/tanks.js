@@ -12,7 +12,7 @@ fetch("/api/tanks")
             tankDiv.appendChild(tankName);
 
             const tankNationality = document.createElement("p");
-            tankNationality.innerText = tank.tankNationality;
+            tankNationality.innerText = tank.nationality;
             tankDiv.appendChild(tankNationality);
 
             const brakeBr = document.createElement("br")
