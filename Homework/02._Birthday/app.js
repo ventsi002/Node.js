@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 app.use(express.json());
 
-app.get("/b", (req, res) => {
+app.get("/birthday", (req, res) => {
     res.sendFile(__dirname + "public/birthday.html");
 });
 
