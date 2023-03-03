@@ -6,7 +6,7 @@ app.use(express.static("public"));
 
 
 app.get("/birthday", (req, res) => {
-    res.sendFile(__dirname + "public/birthday.html");
+    res.sendFile(__dirname + "/public/birthday.html");
 });
 
 
