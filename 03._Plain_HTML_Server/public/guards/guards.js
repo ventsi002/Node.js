@@ -1,2 +1,3 @@
+import { addGuard } from "./barracks.js"
 
-console.log(guards);
+console.log(addGuard("new guard"));

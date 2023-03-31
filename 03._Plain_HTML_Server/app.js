@@ -30,10 +30,16 @@ app.get("/guards", (req, res) => {
     res.sendFile(__dirname + "/public/guards/guards.html");
 });
 
+app.get("/proxy", (req, res) => {
+    fetch('https://www.google.com')
+        .then(response => response.text())
+        .then(result => res.send(result))
+});
+
 /* API */
 
 app.get("/api/tanks", (req, res) => {
-    res.send({ data: tanks });
+    res.send({ data: getTanks() });
 });
 
 app.get("/api/visitors", (req, res) => {
@@ -42,6 +48,14 @@ app.get("/api/visitors", (req, res) => {
 
 app.put("/api/visitors", (req, res) => {
     res.send({ data: ++visitorCount });
+});
+
+app.get("/api/guards", (req, res) => {
+    if (req.query.passport === "theskyisblue") {
+        return res.redirect("/api/tanks");
+    } else {
+        res.send({ message: "qj hui" });
+    }
 });
 
 const PORT = 8080;
