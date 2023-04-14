@@ -38,25 +38,14 @@ app.get("/proxy", (req, res) => {
 
 /* API */
 
-app.get("/api/tanks", (req, res) => {
-    res.send({ data: getTanks() });
-});
+import tankRouter from "./routers/tankRouter.js"
+app.use(tankRouter);
 
-app.get("/api/visitors", (req, res) => {
-    res.send({ data: visitorCount });
-});
+import visitorsRouter from "./routers/visitorsRouter.js"
+app.use(visitorsRouter);
 
-app.put("/api/visitors", (req, res) => {
-    res.send({ data: ++visitorCount });
-});
-
-app.get("/api/guards", (req, res) => {
-    if (req.query.passport === "theskyisblue") {
-        return res.redirect("/api/tanks");
-    } else {
-        res.send({ message: "qj hui" });
-    }
-});
+import guardsrouter from "./routers/guardsRouter.js"
+app.use(guardsrouter)
 
 const PORT = 8080;
 app.listen(PORT, (error) => {

@@ -1,8 +1,17 @@
+import dotenv from "dotenv";
+dotenv.config();
+
+console.log(process.env.SESSION_SECRET)
+
+
 import express from "express";
 const app = express();
 
 import path from "path";
 app.use(express.static(path.resolve("../06._Svelte_Family/dist")));
+
+import helmet from "helmet";
+app.use(helmet());
 
 import cors from "cors";
 app.use(cors({
@@ -12,30 +21,35 @@ app.use(cors({
 
 import session from "express-session";
 app.use(session({
-    secret: 'keyboard cat',
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
     cookie: { secure: false }
 }));
 
-app.get("/gotham/:name", (req, res) => {
-    req.session.name = req.params.name;
-    req.session.hobby = req.query.hobby;
-    res.send({ message: `Hi ${req.session.name}` });
-});
+import rateLimit from 'express-rate-limit'
 
-app.get("/gotham", (req, res) => {
-    if (!req.session.name) {
-        return res.send({ message: "Error. You are not welcome in this city."});
-    } 
-    res.send({ message: `I remember you ${req.session.name} and your hobby is ${req.session.hobby}` });
-});
+const apiLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+    standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+    legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+})
 
-app.get("/leavegotham", (req, res) => {
-    req.session.destroy(() => {
-        res.send({});
-    });
-});
+app.use(apiLimiter);
+
+app.use("/auth", rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 4,
+    standardHeaders: true,
+    legacyHeaders: false,
+}))
+
+import authRouter from "./routers/authRouter.js"
+app.use(authRouter);
+
+import gothamRouter from './routers/gothamRouter.js';
+app.use(gothamRouter);
 
 
 app.get("/piblings", (req, res) => {
